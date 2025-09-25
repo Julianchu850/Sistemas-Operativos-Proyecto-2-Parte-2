@@ -1,9 +1,9 @@
 import java.util.concurrent.locks.*;
 
 public class Tablero {
-    private static final int MAX_STREETS = 30;  // ajusta al tamaño de tu mundo Karel
-    private static final int MAX_AVENUES = 30; 
-    private static final int[][] celdas = new int[MAX_STREETS+1][MAX_AVENUES+1];
+    private static final int MAX_STREETS = 30; // ajustar tamaño de matriz = tamaño mundo
+    private static final int MAX_AVENUES = 30;
+    private static final int[][] celdas = new int[MAX_STREETS + 1][MAX_AVENUES + 1];
     private static final ReentrantLock lock = new ReentrantLock();
     private static final Condition disponible = lock.newCondition();
 
