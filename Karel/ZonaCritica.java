@@ -2,81 +2,69 @@ import java.util.concurrent.locks.*;
 
 public class ZonaCritica {
     private final Lock lock = new ReentrantLock();
-    private final Condition cambio = lock.newCondition();
+    private final Condition condicion = lock.newCondition();
 
-    private String sentidoActual = null;
-    private int enZona = 0;
-    private int pasaronEnTurno = 0;
+    private String sentidoActivo = null;
+    private int contadorSentido = 0;
+    private int robotsEnZona = 0;
     private final int capacidad;
 
     public ZonaCritica(int capacidad) {
         this.capacidad = capacidad;
     }
 
-    public String sentidoContrario(String sentido) {
-        switch (sentido) {
-            case "Norte": return "Sur";
-            case "Sur":   return "Norte";
-            case "Este":  return "Oeste";
-            case "Oeste": return "Este";
-            default: throw new IllegalArgumentException("Sentido inválido: " + sentido);
-        }
-    }
-
     public void entrar(String sentido) throws InterruptedException {
-    lock.lock();
-    try {
-        // esperar si hay un sentido contrario en curso
-        while (sentidoActual != null && !sentidoActual.equals(sentido)) {
-            cambio.await();
-        }
-
-        // si está vacía, me adueño del sentido
-        if (sentidoActual == null) {
-            sentidoActual = sentido;
-            pasaronEnTurno = 0;
-        }
-
-        // si ya se completó el lote de este sentido → esperar al próximo turno
-            if (pasaronEnTurno >= capacidad) {
-                        // cuando se vacíe, el turno pasa al contrario
-            sentidoActual = sentidoContrario(sentido);
-            pasaronEnTurno = 0;
-            cambio.signalAll();
-            // esperar hasta que la zona quede vacía
-            while (enZona > 0 && !sentido.equals(sentidoActual)) {
-                cambio.await();
+        lock.lock();
+        try {
+            // Esperar hasta que pueda entrar
+            while (!puedeEntrar(sentido)) {
+                condicion.await();
             }
-            if (sentidoActual == null) {
-            sentidoActual = sentido;
-            pasaronEnTurno = 0;
-            }
-            pasaronEnTurno = 0;
-
-
             
+            // Actualizar estado
+            if (sentidoActivo == null) {
+                sentidoActivo = sentido;
+            }
+            robotsEnZona++;
+            contadorSentido++;
+            
+        } finally {
+            lock.unlock();
         }
-
-        // ahora sí entro
-        enZona++;
-        pasaronEnTurno++;
-    } finally {
-        lock.unlock();
     }
-}
 
+    private boolean puedeEntrar(String sentido) {
+        if (sentidoActivo == null) return true; // Zona libre
+        if (!sentidoActivo.equals(sentido)) return false; // Sentido contrario
+        return contadorSentido < capacidad; // Verificar capacidad
+    }
 
     public void salir() {
         lock.lock();
         try {
-            enZona--;
-            if (enZona == 0) {
-                // si quedó vacía, cambio turno de sentido
-                sentidoActual = null;
-                cambio.signalAll();
+            robotsEnZona--;
+            
+            // Si la zona se vació, cambiar el sentido
+            if (robotsEnZona == 0) {
+                sentidoActivo = null;
+                contadorSentido = 0;
+                condicion.signalAll(); // Despertar a todos los esperando
             }
+            // Si se completó el lote pero aún hay robots adentro, 
+            // esperar a que salgan todos antes de cambiar sentido
+            
         } finally {
             lock.unlock();
+        }
+    }
+    
+    public String sentidoContrario(String sentido) {
+        switch (sentido) {
+            case "Norte": return "Sur";
+            case "Sur": return "Norte";
+            case "Este": return "Oeste";
+            case "Oeste": return "Este";
+            default: return sentido;
         }
     }
 }

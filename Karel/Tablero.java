@@ -17,8 +17,10 @@ public class Tablero {
     public static ZonaCritica bahiaVertical = new ZonaCritica(4);
     public static ZonaCritica bahiaLarga = new ZonaCritica(4);
     public static ZonaCritica bahiaCorta = new ZonaCritica(4);
-    public static boolean bahiaLibre = true;
-    public static final Semaphore bahiaSem = new Semaphore(4); 
+    public static final Semaphore capacidadBahiaLarga = new Semaphore(4); 
+    public static final Semaphore entradaAzul = new Semaphore(1); 
+
+
 
 
 

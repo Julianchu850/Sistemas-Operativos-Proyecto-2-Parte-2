@@ -3,6 +3,8 @@ import java.awt.Color;
 import java.util.concurrent.CountDownLatch;
 
 
+
+
 public class Racer extends Robot implements Runnable {
 
     private String tipoCamino;
@@ -129,10 +131,7 @@ public class Racer extends Robot implements Runnable {
         try{
         for (int i = 0; i < 4; i++) 
             move();
-        Thread.sleep(1000);
         
-        }catch(InterruptedException e) {
-        e.printStackTrace();
         }finally {
             Tablero.bahiaEspera.release(); // libera el permiso
         }
@@ -141,31 +140,42 @@ public class Racer extends Robot implements Runnable {
             return;
         }
 
-    
-            try{
+    try{
+    try {
+        // Primero esperar capacidad disponible
+        Tablero.capacidadBahiaLarga.acquire();
+        // Luego esperar dirección correcta
         Tablero.bahiaLarga.entrar("Este");
+        
         for (int i = 0; i < 7; i++) 
             move();
+            
+    } catch (InterruptedException e) {
+        e.printStackTrace();
+    } finally {
         Tablero.bahiaLarga.salir();
-
     }
-        catch (InterruptedException e) {
-            e.printStackTrace();
-            }
-        
+    
+    try{
+
         for (int i = 0; i < 3; i++) 
             move();
-
-         try{
         Tablero.bahiaCorta.entrar("Este");
 
         for (int i = 0; i < 5; i++) 
             move();
+        
+        Tablero.bahiaCorta.salir();
 
-        Tablero.bahiaCorta.salir();}
+    }
         catch (InterruptedException e) {
             e.printStackTrace();
-        } 
+        }
+
+    }finally{
+                Tablero.capacidadBahiaLarga.release();
+
+    }
 
         
         
@@ -263,8 +273,25 @@ public class Racer extends Robot implements Runnable {
         }
 
         turnLeft();
-        for (int i = 0; i < 8; i++)
+        for (int i = 0; i < 5; i++)
             move();
+
+        try{
+            Tablero.entradaAzul.acquire();
+            move();
+            move();
+        }catch(InterruptedException e) {
+            e.printStackTrace();
+        }finally{
+            Tablero.entradaAzul.release();
+
+        }
+        move();
+        turnRight();
+        move();
+        move();
+        turnLeft();
+        for(int i = 0;i<7;i++) move();
     }
 
     public void camino_largo_verde() {
@@ -292,11 +319,25 @@ public class Racer extends Robot implements Runnable {
         for (int i = 0; i < 9; i++)
             move();
         turnRight();
-        for (int i = 0; i < 8; i++)
+        for (int i = 0; i < 7; i++)
             move();
+
+        try{
+            Tablero.entradaAzul.acquire();
+        move();
         turnRight();
-        for (int i = 0; i < 2; i++)
-            move();
+        move();
+        }catch(InterruptedException e) {
+            e.printStackTrace();
+        }finally{
+            Tablero.entradaAzul.release();
+        }
+        move();
+        turnRight();
+        move();
+        move();
+        turnLeft();
+        for(int i = 0;i<7;i++) move();
     }
 
     public void run() {
