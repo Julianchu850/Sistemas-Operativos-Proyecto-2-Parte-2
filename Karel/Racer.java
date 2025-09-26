@@ -2,6 +2,10 @@ import kareltherobot.*;
 import java.awt.Color;
 import java.util.concurrent.CountDownLatch;
 
+
+
+
+
 public class Racer extends Robot implements Runnable {
 
     private String tipoCamino;
@@ -12,7 +16,6 @@ public class Racer extends Robot implements Runnable {
     private int miAvenue;
     private Color color;
     private CountDownLatch latch;
-
 
     public Racer(int Street, int Avenue, Direction direction, int beepers, Color color, String tipoCamino,
             int ordenSalida, CountDownLatch latch) {
@@ -26,11 +29,10 @@ public class Racer extends Robot implements Runnable {
         this.miAvenue = Avenue;
     }
 
-    
-    public static void crear_robots(int Street, int Avenue, Direction direction, int beepers, Color color, 
-    String tipoCamino, int numRobots, CountDownLatch latch){
+    public static void crear_robots(int Street, int Avenue, Direction direction, int beepers, Color color,
+            String tipoCamino, int numRobots, CountDownLatch latch) {
         int ordenSalida = 0;
-        while(numRobots>0){
+        while (numRobots > 0) {
             Racer robot = new Racer(Street, Avenue, direction, beepers, color, tipoCamino, ordenSalida, latch);
             Thread thrd = new Thread(robot);
             thrd.start();
@@ -39,8 +41,6 @@ public class Racer extends Robot implements Runnable {
         }
 
     }
-        
-
 
     // Nuevo move controlado por el Tablero
     @Override
@@ -105,30 +105,55 @@ public class Racer extends Robot implements Runnable {
         for (int i = 0; i < 5; i++)
             move();
         turnRight();
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < 3; i++)
             move();
+
+        try{
+            Tablero.zonaVerde.acquire();
+        for (int i = 0; i < 6; i++)
+            move();
+        }catch(InterruptedException e) {
+        e.printStackTrace();
+        }finally{
+            Tablero.zonaVerde.release();
+        }
+        move();
         turnLeft();
-        for (int i = 0; i < 2; i++)
+        for (int i = 0; i < 6; i++)
             move();
     }
 
- public void camino_corto_azul() {
-    for (int i = 0; i < 23; i++) { 
-        move(); 
-    }    
-        turnLeft();   
-         
-    // Continuar el camino normalmente
-    for (int i = 0; i < 10; i++) {
-        move();
-    }
-}
-    public void camino_corto_verde() {
-        for (int i = 0; i < 2; i++)
+    public void camino_corto_azul() {
+        for (int i = 0; i < 23; i++) {
             move();
+        }
         turnLeft();
-        for (int i = 0; i < 7; i++)
+
+        // Continuar el camino normalmente
+        for (int i = 0; i < 10; i++) {
             move();
+        }
+    }
+
+    public void camino_corto_verde() {
+        move();
+    if (Tablero.zonaVerde.tryAcquire()) {  
+        try {
+            // --- Recorrido dentro de la zona verde ---
+            for (int i = 0; i < 1; i++) move();
+            turnLeft();
+            for (int i = 0; i < 7; i++) move();
+            // aquí el robot ya salió de la zona verde
+        } finally {
+            Tablero.zonaVerde.release(); // libera el permiso
+        }
+    } else {
+        // Si ya hay 6 adentro, se va por el camino largo
+        camino_largo_verde();
+        return;
+    }
+        
+
         turnRight();
         for (int i = 0; i < 5; i++)
             move();
@@ -162,7 +187,7 @@ public class Racer extends Robot implements Runnable {
     }
 
     public void camino_largo_verde() {
-        for (int i = 0; i < 1; i++)
+        for (int i = 0; i > 1; i++)
             move();
         turnRight();
         for (int i = 0; i < 3; i++)
