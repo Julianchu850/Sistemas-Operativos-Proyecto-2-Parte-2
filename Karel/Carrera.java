@@ -17,7 +17,7 @@ public class Carrera {
        // Racer.crear_robots(12, 23, Directions.South, 0, Color.GREEN, "largo", 3);
 
         latch.countDown(); // el contador pasa de 1 a 0
-        World.setDelay(30);
+        World.setDelay(10);
 
     }
 

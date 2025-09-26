@@ -3,8 +3,6 @@ import java.awt.Color;
 import java.util.concurrent.CountDownLatch;
 
 
-
-
 public class Racer extends Robot implements Runnable {
 
     private String tipoCamino;
@@ -118,6 +116,52 @@ public class Racer extends Robot implements Runnable {
         turnLeft();
         for (int i = 0; i < 6; i++)
             move();
+for (int i = 0; i < 4; i++) {
+        putBeeper();
+    }
+            turnLeft();   
+     for (int i = 0; i < 1; i++) {
+        move();
+    }
+    turnLeft();   
+    for (int i = 0; i < 1; i++) {
+        move();
+    }
+    turnRight();
+    for (int i = 0; i < 6; i++) {
+        move();
+    }
+        turnLeft();   
+for (int i = 0; i < 1; i++) {
+        move();
+    }
+  turnLeft();   
+  for (int i = 0; i < 6; i++) {
+        move();
+    }
+                turnRight();
+for (int i = 0; i < 2; i++) {
+        move();
+}
+                    turnRight();
+for (int i = 0; i < 1; i++) {
+        move();
+    }
+        turnRight();
+        for (int i = 0; i < 1; i++) {
+        move();
+    }
+        turnLeft();
+        for (int i = 0; i < 5; i++) {
+        move();
+        }
+        turnLeft();
+        for (int i = 0; i < 1; i++) {
+        move();
+        }
+        pickbeepers();
+camino_corto_verde();
+        
     }
 
 
@@ -131,7 +175,10 @@ public class Racer extends Robot implements Runnable {
         try{
         for (int i = 0; i < 4; i++) 
             move();
+        Thread.sleep(1000);
         
+        }catch(InterruptedException e) {
+        e.printStackTrace();
         }finally {
             Tablero.bahiaEspera.release(); // libera el permiso
         }
@@ -140,42 +187,31 @@ public class Racer extends Robot implements Runnable {
             return;
         }
 
-    try{
-    try {
-        // Primero esperar capacidad disponible
-        Tablero.capacidadBahiaLarga.acquire();
-        // Luego esperar dirección correcta
+    
+            try{
         Tablero.bahiaLarga.entrar("Este");
-        
         for (int i = 0; i < 7; i++) 
             move();
-            
-    } catch (InterruptedException e) {
-        e.printStackTrace();
-    } finally {
         Tablero.bahiaLarga.salir();
-    }
-    
-    try{
-
-        for (int i = 0; i < 3; i++) 
-            move();
-        Tablero.bahiaCorta.entrar("Este");
-
-        for (int i = 0; i < 5; i++) 
-            move();
-        
-        Tablero.bahiaCorta.salir();
 
     }
         catch (InterruptedException e) {
             e.printStackTrace();
-        }
+            }
+        
+        for (int i = 0; i < 3; i++) 
+            move();
 
-    }finally{
-                Tablero.capacidadBahiaLarga.release();
+         try{
+        Tablero.bahiaCorta.entrar("Este");
 
-    }
+        for (int i = 0; i < 5; i++) 
+            move();
+
+        Tablero.bahiaCorta.salir();}
+        catch (InterruptedException e) {
+            e.printStackTrace();
+        } 
 
         
         
@@ -196,6 +232,53 @@ public class Racer extends Robot implements Runnable {
 
         for (int i = 0; i < 5; i++) 
             move();
+for (int i = 0; i < 4; i++) {
+        putBeeper();
+    }
+turnLeft();   
+     for (int i = 0; i < 1; i++) {
+        move();
+    }
+    turnLeft();   
+    for (int i = 0; i < 1; i++) {
+        move();
+    }
+    turnRight();
+    for (int i = 0; i < 6; i++) {
+        move();
+    }
+        turnLeft();   
+for (int i = 0; i < 1; i++) {
+        move();
+    }
+  turnLeft();   
+  for (int i = 0; i < 6; i++) {
+        move();
+    }
+                turnRight();
+for (int i = 0; i < 2; i++) {
+        move();
+}
+                    turnRight();
+for (int i = 0; i < 1; i++) {
+        move();
+    }
+        turnRight();
+        for (int i = 0; i < 1; i++) {
+        move();
+    }
+        turnLeft();
+        for (int i = 0; i < 5; i++) {
+        move();
+        }
+        turnLeft();
+        for (int i = 0; i < 1; i++) {
+        move();
+        }
+        pickbeepers();
+camino_corto_verde();
+        
+
     }
 
 
@@ -273,25 +356,47 @@ public class Racer extends Robot implements Runnable {
         }
 
         turnLeft();
-        for (int i = 0; i < 5; i++)
+        for (int i = 0; i < 8; i++)
             move();
-
-        try{
-            Tablero.entradaAzul.acquire();
-            move();
-            move();
-        }catch(InterruptedException e) {
-            e.printStackTrace();
-        }finally{
-            Tablero.entradaAzul.release();
-
+            
+turnRight();
+for (int i = 0; i < 2; i++) {
+        move();
         }
-        move();
-        turnRight();
-        move();
-        move();
         turnLeft();
-        for(int i = 0;i<7;i++) move();
+        for (int i = 0; i < 7; i++) {
+        move();
+        }
+        for (int i = 0; i < 4; i++) {
+        putBeeper();
+    }
+        turnLeft();
+        for (int i = 0; i < 1; i++) {
+        move();
+        }
+        turnLeft();
+         for (int i = 0; i < 6; i++) {
+        move();
+        }
+        turnRight();
+        for (int i = 0; i < 1; i++) {
+        move();
+        }
+        turnRight();
+        for (int i = 0; i < 6; i++) {
+        move();
+        }
+        turnLeft();
+         for (int i = 0; i < 1; i++) {
+        move();
+        }
+        turnLeft();
+         for (int i = 0; i < 6; i++) {
+        move();
+        }
+        pickbeepers();
+camino_corto_azul();
+
     }
 
     public void camino_largo_verde() {
@@ -319,25 +424,49 @@ public class Racer extends Robot implements Runnable {
         for (int i = 0; i < 9; i++)
             move();
         turnRight();
-        for (int i = 0; i < 7; i++)
+        for (int i = 0; i < 8; i++)
+            move();
+        turnRight();
+        for (int i = 0; i < 2; i++)
             move();
 
-        try{
-            Tablero.entradaAzul.acquire();
+            turnRight();
+for (int i = 0; i < 2; i++) {
         move();
-        turnRight();
-        move();
-        }catch(InterruptedException e) {
-            e.printStackTrace();
-        }finally{
-            Tablero.entradaAzul.release();
         }
-        move();
-        turnRight();
-        move();
-        move();
         turnLeft();
-        for(int i = 0;i<7;i++) move();
+        for (int i = 0; i < 7; i++) {
+        move();
+        }
+        for (int i = 0; i < 4; i++) {
+        putBeeper();
+    }
+        turnLeft();
+        for (int i = 0; i < 1; i++) {
+        move();
+        }
+        turnLeft();
+         for (int i = 0; i < 6; i++) {
+        move();
+        }
+        turnRight();
+        for (int i = 0; i < 1; i++) {
+        move();
+        }
+        turnRight();
+        for (int i = 0; i < 6; i++) {
+        move();
+        }
+        turnLeft();
+         for (int i = 0; i < 1; i++) {
+        move();
+        }
+        turnLeft();
+         for (int i = 0; i < 6; i++) {
+        move();
+        }
+                pickbeepers();
+camino_corto_azul();
     }
 
     public void run() {
@@ -373,4 +502,10 @@ public class Racer extends Robot implements Runnable {
         turnLeft();
         turnLeft();
     }
+    private void putbeepers() {
+    for (int i = 0; i < 4; i++) {
+        putBeeper();
+    }
+}
+
 }
