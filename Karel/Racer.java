@@ -3,9 +3,6 @@ import java.awt.Color;
 import java.util.concurrent.CountDownLatch;
 
 
-
-
-
 public class Racer extends Robot implements Runnable {
 
     private String tipoCamino;
@@ -75,8 +72,6 @@ public class Racer extends Robot implements Runnable {
     }
 
     public void camino_largo_azul() {
-        for (int i = 0; i < 4; i++)
-            move();
         turnLeft();
         for (int i = 0; i < 10; i++)
             move();
@@ -123,17 +118,76 @@ public class Racer extends Robot implements Runnable {
             move();
     }
 
-    public void camino_corto_azul() {
-        for (int i = 0; i < 23; i++) {
-            move();
-        }
-        turnLeft();
 
+
+    public void camino_corto_azul() {
+        for (int i = 0; i < 4; i++) 
+            move();
+
+
+        if(Tablero.bahiaEspera.tryAcquire()){
+        try{
+        for (int i = 0; i < 4; i++) 
+            move();
+        Thread.sleep(1000);
+        
+        }catch(InterruptedException e) {
+        e.printStackTrace();
+        }finally {
+            Tablero.bahiaEspera.release(); // libera el permiso
+        }
+        }else{
+            camino_largo_azul();
+            return;
+        }
+
+    
+            try{
+        Tablero.bahiaLarga.entrar("Este");
+        for (int i = 0; i < 7; i++) 
+            move();
+        Tablero.bahiaLarga.salir();
+
+    }
+        catch (InterruptedException e) {
+            e.printStackTrace();
+            }
+        
+        for (int i = 0; i < 3; i++) 
+            move();
+
+         try{
+        Tablero.bahiaCorta.entrar("Este");
+
+        for (int i = 0; i < 5; i++) 
+            move();
+
+        Tablero.bahiaCorta.salir();}
+        catch (InterruptedException e) {
+            e.printStackTrace();
+        } 
+
+        
+        
+        turnLeft();
         // Continuar el camino normalmente
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 3; i++) {
             move();
         }
+        try{
+        Tablero.bahiaVertical.entrar("Norte");
+        for (int i = 0; i < 7; i++) {
+            move();
+        }
+        Tablero.bahiaVertical.salir();}
+        catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        for (int i = 0; i < 5; i++) 
+            move();
     }
+
 
     public void camino_corto_verde() {
         move();
@@ -142,7 +196,7 @@ public class Racer extends Robot implements Runnable {
             // --- Recorrido dentro de la zona verde ---
             for (int i = 0; i < 1; i++) move();
             turnLeft();
-            for (int i = 0; i < 7; i++) move();
+            for (int i = 0; i < 6; i++) move();
             // aquí el robot ya salió de la zona verde
         } finally {
             Tablero.zonaVerde.release(); // libera el permiso
@@ -153,26 +207,47 @@ public class Racer extends Robot implements Runnable {
         return;
     }
         
-
+        try{
+        Tablero.bahiaVertical.entrar("Sur");
+        move();
         turnRight();
         for (int i = 0; i < 5; i++)
             move();
         turnRight();
         for (int i = 0; i < 1; i++)
             move();
+        Tablero.bahiaVertical.salir();}
+        catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        
         turnLeft();
-        for (int i = 0; i < 4; i++)
+        for (int i = 0; i < 3; i++)
             move();
+
+         
+        try{
+        Tablero.bahiaCorta.entrar("Oeste");
+        move();
         turnRight();
         for (int i = 0; i < 3; i++)
             move();
         turnRight();
         for (int i = 0; i < 1; i++)
             move();
+        Tablero.bahiaCorta.salir();}
+        catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         turnLeft();
         for (int i = 0; i < 5; i++)
             move();
         turnLeft();
+
+
+        try{
+        Tablero.bahiaLarga.entrar("Oeste");
         for (int i = 0; i < 1; i++)
             move();
         turnRight();
@@ -181,6 +256,12 @@ public class Racer extends Robot implements Runnable {
         turnRight();
         for (int i = 0; i < 1; i++)
             move();
+        
+        Tablero.bahiaLarga.salir();}
+        catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         turnLeft();
         for (int i = 0; i < 8; i++)
             move();
