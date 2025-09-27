@@ -1,5 +1,5 @@
-import java.util.concurrent.locks.*;
 import java.util.concurrent.Semaphore;
+import java.util.concurrent.locks.*;
 
 
 public class Tablero {
@@ -17,8 +17,7 @@ public class Tablero {
     public static ZonaCritica bahiaVertical = new ZonaCritica(4);
     public static ZonaCritica bahiaLarga = new ZonaCritica(4);
     public static ZonaCritica bahiaCorta = new ZonaCritica(4);
-    public static final Semaphore capacidadBahiaLarga = new Semaphore(4); 
-    public static final Semaphore entradaAzul = new Semaphore(1); 
+
 
 
 
