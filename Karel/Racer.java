@@ -2,7 +2,6 @@ import kareltherobot.*;
 import java.awt.Color;
 import java.util.concurrent.CountDownLatch;
 
-
 public class Racer extends Robot implements Runnable {
 
     private String tipoCamino;
@@ -103,233 +102,230 @@ public class Racer extends Robot implements Runnable {
         for (int i = 0; i < 3; i++)
             move();
 
-        try{
+        try {
             Tablero.zonaVerde.acquire();
-        for (int i = 0; i < 6; i++)
-            move();
-        }catch(InterruptedException e) {
-        e.printStackTrace();
-        }finally{
+            for (int i = 0; i < 6; i++)
+                move();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } finally {
             Tablero.zonaVerde.release();
         }
         move();
         turnLeft();
         for (int i = 0; i < 6; i++)
             move();
-for (int i = 0; i < 4; i++) {
-        putBeeper();
-    }
-            turnLeft();   
-     for (int i = 0; i < 1; i++) {
-        move();
-    }
-    turnLeft();   
-    for (int i = 0; i < 1; i++) {
-        move();
-    }
-    turnRight();
-    for (int i = 0; i < 6; i++) {
-        move();
-    }
-        turnLeft();   
-for (int i = 0; i < 1; i++) {
-        move();
-    }
-  turnLeft();   
-  for (int i = 0; i < 6; i++) {
-        move();
-    }
-                turnRight();
-for (int i = 0; i < 2; i++) {
-        move();
-}
-                    turnRight();
-for (int i = 0; i < 1; i++) {
-        move();
-    }
+        for (int i = 0; i < 4; i++) {
+            putBeeper();
+        }
+        turnLeft();
+        for (int i = 0; i < 1; i++) {
+            move();
+        }
+        turnLeft();
+        for (int i = 0; i < 1; i++) {
+            move();
+        }
+        turnRight();
+        for (int i = 0; i < 6; i++) {
+            move();
+        }
+        turnLeft();
+        for (int i = 0; i < 1; i++) {
+            move();
+        }
+        turnLeft();
+        for (int i = 0; i < 6; i++) {
+            move();
+        }
+        turnRight();
+        for (int i = 0; i < 2; i++) {
+            move();
+        }
         turnRight();
         for (int i = 0; i < 1; i++) {
-        move();
-    }
+            move();
+        }
+        turnRight();
+        for (int i = 0; i < 1; i++) {
+            move();
+        }
         turnLeft();
         for (int i = 0; i < 5; i++) {
-        move();
+            move();
         }
         turnLeft();
         for (int i = 0; i < 1; i++) {
-        move();
+            move();
         }
         pickbeepers();
-camino_corto_verde();
-        
+        camino_corto_verde();
+
     }
 
-
-
+    // funcion para camino corto
     public void camino_corto_azul() {
-        for (int i = 0; i < 4; i++) 
+        for (int i = 0; i < 4; i++)
             move();
 
+            // semaforo para verificar si va a camino corto o largo
+        if (Tablero.bahiaEspera.tryAcquire()) {
+            try {
+                for (int i = 0; i < 4; i++)
+                    move();
+                Thread.sleep(1000); // reduce la probabilidad de congestion
 
-        if(Tablero.bahiaEspera.tryAcquire()){
-        try{
-        for (int i = 0; i < 4; i++) 
-            move();
-        Thread.sleep(1000);
-        
-        }catch(InterruptedException e) {
-        e.printStackTrace();
-        }finally {
-            Tablero.bahiaEspera.release(); // libera el permiso
-        }
-        }else{
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } finally {
+                Tablero.bahiaEspera.release(); // libera el permiso
+            }
+        } else {
             camino_largo_azul();
             return;
         }
 
-    
-            try{
-        Tablero.bahiaLarga.entrar("Este");
-        for (int i = 0; i < 7; i++) 
-            move();
-        Tablero.bahiaLarga.salir();
+        // verifica si es posible pasar por una de las zonas criticas
+        try {
+            Tablero.bahiaLarga.entrar("Este");
+            for (int i = 0; i < 7; i++)
+                move();
+            Tablero.bahiaLarga.salir();
 
-    }
-        catch (InterruptedException e) {
+        } catch (InterruptedException e) {
             e.printStackTrace();
-            }
-        
-        for (int i = 0; i < 3; i++) 
+        }
+
+        for (int i = 0; i < 3; i++)
             move();
 
-         try{
-        Tablero.bahiaCorta.entrar("Este");
+        try {
+            Tablero.bahiaCorta.entrar("Este");
 
-        for (int i = 0; i < 5; i++) 
-            move();
+            for (int i = 0; i < 5; i++)
+                move();
 
-        Tablero.bahiaCorta.salir();}
-        catch (InterruptedException e) {
+            Tablero.bahiaCorta.salir();
+        } catch (InterruptedException e) {
             e.printStackTrace();
-        } 
+        }
 
-        
-        
         turnLeft();
         // Continuar el camino normalmente
         for (int i = 0; i < 3; i++) {
             move();
         }
-        try{
-        Tablero.bahiaVertical.entrar("Norte");
-        for (int i = 0; i < 7; i++) {
-            move();
-        }
-        Tablero.bahiaVertical.salir();}
-        catch (InterruptedException e) {
+        try {
+            Tablero.bahiaVertical.entrar("Norte");
+            for (int i = 0; i < 7; i++) {
+                move();
+            }
+            Tablero.bahiaVertical.salir();
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
-        for (int i = 0; i < 5; i++) 
+        // continua su recorrido
+        for (int i = 0; i < 5; i++)
             move();
-for (int i = 0; i < 4; i++) {
-        putBeeper();
-    }
-turnLeft();   
-     for (int i = 0; i < 1; i++) {
-        move();
-    }
-    turnLeft();   
-    for (int i = 0; i < 1; i++) {
-        move();
-    }
-    turnRight();
-    for (int i = 0; i < 6; i++) {
-        move();
-    }
-        turnLeft();   
-for (int i = 0; i < 1; i++) {
-        move();
-    }
-  turnLeft();   
-  for (int i = 0; i < 6; i++) {
-        move();
-    }
-                turnRight();
-for (int i = 0; i < 2; i++) {
-        move();
-}
-                    turnRight();
-for (int i = 0; i < 1; i++) {
-        move();
-    }
+        for (int i = 0; i < 4; i++) {
+            putBeeper();
+        }
+        turnLeft();
+        for (int i = 0; i < 1; i++) {
+            move();
+        }
+        turnLeft();
+        for (int i = 0; i < 1; i++) {
+            move();
+        }
+        turnRight();
+        for (int i = 0; i < 6; i++) {
+            move();
+        }
+        turnLeft();
+        for (int i = 0; i < 1; i++) {
+            move();
+        }
+        turnLeft();
+        for (int i = 0; i < 6; i++) {
+            move();
+        }
+        turnRight();
+        for (int i = 0; i < 2; i++) {
+            move();
+        }
         turnRight();
         for (int i = 0; i < 1; i++) {
-        move();
-    }
+            move();
+        }
+        turnRight();
+        for (int i = 0; i < 1; i++) {
+            move();
+        }
         turnLeft();
         for (int i = 0; i < 5; i++) {
-        move();
+            move();
         }
         turnLeft();
         for (int i = 0; i < 1; i++) {
-        move();
+            move();
         }
         pickbeepers();
-camino_corto_verde();
-        
+        camino_corto_verde();
 
     }
-
 
     public void camino_corto_verde() {
         move();
-    if (Tablero.zonaVerde.tryAcquire()) {  
+        if (Tablero.zonaVerde.tryAcquire()) {
+            try {
+                //  semafoto para verificar si debe ir por el camino corto o largo
+                for (int i = 0; i < 1; i++)
+                    move();
+                turnLeft();
+                for (int i = 0; i < 6; i++)
+                    move();
+                // salimos de la zona del semaforo
+            } finally {
+                Tablero.zonaVerde.release(); // libera el permiso
+            }
+        } else {
+            // Si ya hay 6 adentro, se va por el camino largo
+            camino_largo_verde();
+            return;
+        }
+
+        // pasamos por zonas criticas
         try {
-            // --- Recorrido dentro de la zona verde ---
-            for (int i = 0; i < 1; i++) move();
-            turnLeft();
-            for (int i = 0; i < 6; i++) move();
-            // aquí el robot ya salió de la zona verde
-        } finally {
-            Tablero.zonaVerde.release(); // libera el permiso
-        }
-    } else {
-        // Si ya hay 6 adentro, se va por el camino largo
-        camino_largo_verde();
-        return;
-    }
-        
-        try{
-        Tablero.bahiaVertical.entrar("Sur");
-        move();
-        turnRight();
-        for (int i = 0; i < 5; i++)
+            Tablero.bahiaVertical.entrar("Sur");
             move();
-        turnRight();
-        for (int i = 0; i < 1; i++)
-            move();
-        Tablero.bahiaVertical.salir();}
-        catch (InterruptedException e) {
+            turnRight();
+            for (int i = 0; i < 5; i++)
+                move();
+            turnRight();
+            for (int i = 0; i < 1; i++)
+                move();
+            Tablero.bahiaVertical.salir();
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        
+
         turnLeft();
         for (int i = 0; i < 3; i++)
             move();
 
-         
-        try{
-        Tablero.bahiaCorta.entrar("Oeste");
-        move();
-        turnRight();
-        for (int i = 0; i < 3; i++)
+        try {
+            Tablero.bahiaCorta.entrar("Oeste");
             move();
-        turnRight();
-        for (int i = 0; i < 1; i++)
-            move();
-        Tablero.bahiaCorta.salir();}
-        catch (InterruptedException e) {
+            turnRight();
+            for (int i = 0; i < 3; i++)
+                move();
+            turnRight();
+            for (int i = 0; i < 1; i++)
+                move();
+            Tablero.bahiaCorta.salir();
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
@@ -338,67 +334,67 @@ camino_corto_verde();
             move();
         turnLeft();
 
+        try {
+            Tablero.bahiaLarga.entrar("Oeste");
+            for (int i = 0; i < 1; i++)
+                move();
+            turnRight();
+            for (int i = 0; i < 5; i++)
+                move();
+            turnRight();
+            for (int i = 0; i < 1; i++)
+                move();
 
-        try{
-        Tablero.bahiaLarga.entrar("Oeste");
-        for (int i = 0; i < 1; i++)
-            move();
-        turnRight();
-        for (int i = 0; i < 5; i++)
-            move();
-        turnRight();
-        for (int i = 0; i < 1; i++)
-            move();
-        
-        Tablero.bahiaLarga.salir();}
-        catch (InterruptedException e) {
+            Tablero.bahiaLarga.salir();
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
         turnLeft();
         for (int i = 0; i < 8; i++)
             move();
-            
-turnRight();
-for (int i = 0; i < 2; i++) {
-        move();
+
+        turnRight();
+        for (int i = 0; i < 2; i++) {
+            move();
         }
         turnLeft();
         for (int i = 0; i < 7; i++) {
-        move();
+            move();
         }
         for (int i = 0; i < 4; i++) {
-        putBeeper();
-    }
-        turnLeft();
-        for (int i = 0; i < 1; i++) {
-        move();
+            putBeeper();
         }
         turnLeft();
-         for (int i = 0; i < 6; i++) {
-        move();
+        for (int i = 0; i < 1; i++) {
+            move();
+        }
+        turnLeft();
+        for (int i = 0; i < 6; i++) {
+            move();
         }
         turnRight();
         for (int i = 0; i < 1; i++) {
-        move();
+            move();
         }
         turnRight();
         for (int i = 0; i < 6; i++) {
-        move();
+            move();
         }
         turnLeft();
-         for (int i = 0; i < 1; i++) {
-        move();
+        for (int i = 0; i < 1; i++) {
+            move();
         }
         turnLeft();
-         for (int i = 0; i < 6; i++) {
-        move();
+        for (int i = 0; i < 6; i++) {
+            move();
         }
         pickbeepers();
-camino_corto_azul();
+        camino_corto_azul();
 
     }
 
+    // funcion para camino largo
     public void camino_largo_verde() {
         for (int i = 0; i > 1; i++)
             move();
@@ -430,43 +426,43 @@ camino_corto_azul();
         for (int i = 0; i < 2; i++)
             move();
 
-            turnRight();
-for (int i = 0; i < 2; i++) {
-        move();
+        turnRight();
+        for (int i = 0; i < 2; i++) {
+            move();
         }
         turnLeft();
         for (int i = 0; i < 7; i++) {
-        move();
+            move();
         }
         for (int i = 0; i < 4; i++) {
-        putBeeper();
-    }
-        turnLeft();
-        for (int i = 0; i < 1; i++) {
-        move();
+            putBeeper();
         }
         turnLeft();
-         for (int i = 0; i < 6; i++) {
-        move();
+        for (int i = 0; i < 1; i++) {
+            move();
+        }
+        turnLeft();
+        for (int i = 0; i < 6; i++) {
+            move();
         }
         turnRight();
         for (int i = 0; i < 1; i++) {
-        move();
+            move();
         }
         turnRight();
         for (int i = 0; i < 6; i++) {
-        move();
+            move();
         }
         turnLeft();
-         for (int i = 0; i < 1; i++) {
-        move();
+        for (int i = 0; i < 1; i++) {
+            move();
         }
         turnLeft();
-         for (int i = 0; i < 6; i++) {
-        move();
+        for (int i = 0; i < 6; i++) {
+            move();
         }
-                pickbeepers();
-camino_corto_azul();
+        pickbeepers();
+        camino_corto_azul();
     }
 
     public void run() {
@@ -477,16 +473,12 @@ camino_corto_azul();
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
-        if (tipoCamino.equals("largo") && this.color == Color.BLUE) {
-            camino_largo_azul();
-        } else if (tipoCamino.equals("corto") && this.color == Color.BLUE) {
+        // verificamos recorrido inicial
+        if (tipoCamino.equals("corto") && this.color == Color.BLUE) {
             camino_corto_azul();
         } else if (tipoCamino.equals("corto") && this.color == Color.GREEN) {
             camino_corto_verde();
-        } else if (tipoCamino.equals("largo") && this.color == Color.GREEN) {
-            camino_largo_verde();
-        }
+        } 
     }
 
     private void pickbeepers() {
@@ -502,10 +494,11 @@ camino_corto_azul();
         turnLeft();
         turnLeft();
     }
+
     private void putbeepers() {
-    for (int i = 0; i < 4; i++) {
-        putBeeper();
+        for (int i = 0; i < 4; i++) {
+            putBeeper();
+        }
     }
-}
 
 }

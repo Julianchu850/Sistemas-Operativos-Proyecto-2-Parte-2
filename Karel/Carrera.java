@@ -10,11 +10,9 @@ public class Carrera {
         CountDownLatch latch = new CountDownLatch(1);
 
         // Azules
-        //Racer.crear_robots(1, 7, Directions.East, 0, Color.BLUE, "corto", 28,latch);
         Racer.crear_robots(1, 7, Directions.East, 0, Color.BLUE, "corto", 28,latch);
 
         Racer.crear_robots(12, 23, Directions.South, 0, Color.GREEN, "corto", 28, latch);
-       // Racer.crear_robots(12, 23, Directions.South, 0, Color.GREEN, "largo", 3);
 
         latch.countDown(); // el contador pasa de 1 a 0
         World.setDelay(10);
